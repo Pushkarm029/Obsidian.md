@@ -1,0 +1,7 @@
+{
+	"nodes":[
+		{"id":"b83feb40c54cc5ce","x":620,"y":-560,"width":400,"height":400,"type":"file","file":"Datree.md"},
+		{"id":"ab7e1e769be4eefd","x":-600,"y":-360,"width":940,"height":760,"type":"file","file":"Kubernetes Introduction.md"}
+	],
+	"edges":[]
+}
