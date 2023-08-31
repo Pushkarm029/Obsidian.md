@@ -8,31 +8,7 @@
         "type": "tabs",
         "children": [
           {
-            "id": "6d9d43b03ff790c7",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Kubernetes Introduction.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
             "id": "795c4537aad53487",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Civo Academy.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "65d1b2d4f997effb",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -44,23 +20,31 @@
             }
           },
           {
-            "id": "fd7386253abbfad0",
+            "id": "2c9da628b1eea862",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "Civo Academy.md",
+                "mode": "source",
+                "source": false
+              }
             }
           },
           {
-            "id": "94613f68434d183d",
+            "id": "35602f455bcb6666",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "Code Basics ML.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -106,8 +90,7 @@
               "state": {}
             }
           }
-        ],
-        "currentTab": 2
+        ]
       }
     ],
     "direction": "horizontal",
@@ -128,6 +111,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "Civo Academy.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -144,6 +128,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "Civo Academy.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -165,7 +150,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "Civo Academy.md"
+              }
             }
           }
         ]
@@ -185,22 +172,26 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "94613f68434d183d",
+  "active": "2c9da628b1eea862",
   "lastOpenFiles": [
-    "Technical Interview (quick, short, and precise).md",
-    "Machine Learning.md",
-    "Pasted image 20230807183003.png",
-    "Pasted image 20230807182942.png",
-    "Pasted image 20230807182814.png",
-    "Pasted image 20230807180335.png",
+    "Pasted image 20230831113253.png",
+    "Pasted image 20230831111340.png",
+    "Pasted image 20230831110237.png",
+    "Pasted image 20230831105419.png",
+    "Code Basics ML.md",
     "Civo Academy.md",
-    "Pasted image 20230807163144.png",
-    "WhatsApp Image 2023-08-06 at 20.42.24.jpg",
-    "Pasted image 20230806203546.png",
-    "Pasted image 20230806203503.png",
-    "Pasted image 20230806203409.png",
-    "Pasted image 20230806203346.png",
+    "Pandas_Cheat_Sheet.pdf",
+    "Machine Learning.md",
+    "main_notes.pdf",
+    "Pasted image 20230824114000.png",
+    "Pasted image 20230824113542.png",
+    "Pasted image 20230824112438.png",
+    "Pasted image 20230824105318.png",
+    "Pasted image 20230824104238.png",
+    "Pasted image 20230824102454.png",
+    "Pasted image 20230824102206.png",
     "Kubernetes Introduction.md",
+    "Technical Interview (quick, short, and precise).md",
     "source.md",
     "MLH.md",
     "Documentation issues in OPA Policy reference.md",

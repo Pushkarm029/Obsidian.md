@@ -117,3 +117,33 @@ In contrast, the locally weighted linear regression algorithm does the following
 - τ is called the bandwidth parameter
 
 ## Probabilistic Interpretation
+![[main_notes.pdf#page=16]]
+
+## Chapter 2 : Classification & Logistic Regression
+
+### 2.1 Logistic Regression
+![[main_notes.pdf#page=21]]
+
+### 2.2 Digression : preceptron learning algorithm
+
+![[main_notes.pdf#page=24]]
+
+### **2.4 Another algorithm for maximizing l(θ)** 
+
+#### **Newton's Method**
+
+![[Pasted image 20230823170957.png]]
+
+![[main_notes.pdf#page=28]]
+
+
+
+# Chapter 3 : Generalized linear models
+
+![[main_notes.pdf#page=30]]
+
+## Constructing GLMs
+![[main_notes.pdf#page=32]]
+
+
+# Chapter 4 : Generative learning algorithms
