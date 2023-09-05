@@ -8,36 +8,24 @@
         "type": "tabs",
         "children": [
           {
-            "id": "795c4537aad53487",
+            "id": "27c5dd5af13b196c",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Machine Learning.md",
+                "file": "Postman Task 1.md",
                 "mode": "source",
                 "source": false
               }
             }
           },
           {
-            "id": "2c9da628b1eea862",
+            "id": "5149968b6efa2fb6",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Civo Academy.md",
-                "mode": "source",
-                "source": false
-              }
-            }
-          },
-          {
-            "id": "35602f455bcb6666",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "Code Basics ML.md",
+                "file": "Postman.md",
                 "mode": "source",
                 "source": false
               }
@@ -111,7 +99,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Civo Academy.md",
+                "file": "Postman.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -128,7 +116,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Civo Academy.md",
+                "file": "Postman.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -151,7 +139,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Civo Academy.md"
+                "file": "Postman.md"
               }
             }
           }
@@ -172,31 +160,38 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "2c9da628b1eea862",
+  "active": "5149968b6efa2fb6",
   "lastOpenFiles": [
-    "Pasted image 20230831113253.png",
-    "Pasted image 20230831111340.png",
-    "Pasted image 20230831110237.png",
-    "Pasted image 20230831105419.png",
+    "Pasted image 20230905131400.png",
+    "Pasted image 20230905130730.png",
+    "Pasted image 20230905130506.png",
+    "Pasted image 20230905125502.png",
+    "Pasted image 20230905124136.png",
+    "Pasted image 20230905124122.png",
+    "Pasted image 20230905123900.png",
+    "Pasted image 20230904192248.png",
+    "Pasted image 20230904192134.png",
+    "Pasted image 20230904191948.png",
+    "Pasted image 20230904191912.png",
+    "Postman Task 1.md",
+    "Postman.md",
+    "Untitled.md",
+    "Advanced Learning Algorithms.md",
+    "DeepLearning by Codebasics.md",
     "Code Basics ML.md",
+    "Lens.md",
+    "Untitled",
+    "Datree.md",
     "Civo Academy.md",
     "Pandas_Cheat_Sheet.pdf",
     "Machine Learning.md",
     "main_notes.pdf",
-    "Pasted image 20230824114000.png",
-    "Pasted image 20230824113542.png",
-    "Pasted image 20230824112438.png",
-    "Pasted image 20230824105318.png",
-    "Pasted image 20230824104238.png",
-    "Pasted image 20230824102454.png",
-    "Pasted image 20230824102206.png",
     "Kubernetes Introduction.md",
     "Technical Interview (quick, short, and precise).md",
     "source.md",
     "MLH.md",
     "Documentation issues in OPA Policy reference.md",
     "Untitled 1.canvas",
-    "Datree.md",
     "().md",
     "2023-07-29.md",
     "DevOps Canva.canvas",
