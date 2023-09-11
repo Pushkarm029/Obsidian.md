@@ -144,7 +144,7 @@
 - fenc is encoding function and fdec is decoding function.
 - An AA can be trained by applying standard back-propagation of error derivatives. Depending on the nature of the input data, the loss function can either be the squared error LSE for continuous values or the cross-entropy LCE for binary vectors:
 - ![[Pasted image 20230905130730.png]]
-- The AA training method approximates the CD method of the RBM. Another important fact is that an AA with a nonlinear fenc differs from a PCA as it is able to capture multimodal aspects of the input distribution. Another important fact is that an AA with a nonlinear fenc differs from a PCA as it is able to capture multimodal aspects of the input distribution. Similarly to the parametrization in an RBM, the decoder’s weight matrix Wdec can be set to the transpose of the encoder’s weight matrix, i.e. Wdec = W enc. In such a case, the AA is said to have tied weights. The advantage of this constraint is to avoid undesirable effects of the training process, such as encoding the identity function, i.e. fenc(x) = x. This useless result is possible when the encoding dimensionality is not smaller than the input dimensionality.
+- The AA training method approximates the CD method of the RBM. Another important fact is that an AA with a nonlinear encoding function differs from a PCA as it is able to capture multimodal aspects of the input distribution. Another important fact is that an AA with a nonlinear encoding function differs from a PCA as it is able to capture multimodal aspects of the input distribution. Similarly to the parametrization in an RBM, the decoder’s weight matrix Wdec can be set to the transpose of the encoder’s weight matrix, i.e. Wdec = W enc. In such a case, the AA is said to have tied weights. The advantage of this constraint is to avoid undesirable effects of the training process, such as encoding the identity function, i.e. encoding function(x) = x. This useless result is possible when the encoding dimensionality is not smaller than the input dimensionality.
 - An interesting variant of the AA is the Denoising Auto-Associator (DAA) [18]. A DAA is an AA trained to reconstruct noisy inputs. To achieve this goal, the instance fed to the network is not x but a corrupted version x˜. After training, if the network is able to compute a reconstruction xˆ of x with a small loss, then it is admitted that the network has learned to remove the noise in the data in addition to encode it in a different feature space.
 - ![[Pasted image 20230905131400.png]]
 - Finally, a Stacked Auto-Associator (SAA) [3, 19, 18, 20] is a deep neural network trained following the deep learning scheme: an unsupervised greedy layer-wise pre-training before a fine-tuning supervised stage, as explained in Sect. 2.3 (see also Fig. 1). Surprisingly, for d dimensional inputs and layers of size k d, a SAA rarely learns the identity function [3]. In addition, it is possible to use different regularization rules and the most successful results have been reported with adding a sparsity constraint on the encoding unit activations [20, 21, 22]. This leads to learning very different features (w.r.t RBM) in the intermediate layers and the network performs a trade-off between reconstruction loss and information content of the representation [21].
@@ -181,11 +181,139 @@
 - A TensorFlow computation is described by a directed graph, which is composed of a set of nodes. The graph represents a dataflow computation, with extensions for allowing some kinds of nodes to maintain and update persistent state and for branching and looping control structures within the graph.
 - Values that flow along normal edges in the graph (from outputs to inputs) are tensors, Special edges, called control dependencies, can also exist in the graph: no data flows along such edges, but they indicate that the source node for the control dependence must finish executing before the destination node for the control dependence starts executingSpecial edges, called control dependencies, can also exist in the graph: no data flows along such edges, but they indicate that the source node for the control dependence must finish executing before the destination node for the control dependence starts executing. 
 - control dependencies can also be used to control the peak memory usage.
+- #### Operations and Kernels
+- An operation can have attributes, and all attributes must be provided or inferred at graph-construction time in order to instantiate a node to perform the operation
+- A kernel is a particular implementation of an operation that can be run on a particular type of device (e.g., CPU or GPU).
+- A TensorFlow binary defines the sets of operations and kernels available via a registration mechanism, and this set can be extended by linking in additional operation and/or kernel definitions/registrations.
+- ### Sessions 
+- TensorFlow is a client-programme interface that allows clients to create a computation graph through the Session interface. It supports Extend and Run operations, which allow for the computation of output names and optional tensors. The TensorFlow implementation computes the transitive closure of all nodes and executes them in a sequence that respects dependencies. Most clients use TensorFlow to execute a full graph or subgraphs repeatedly.
+
+![[Pasted image 20230905172817.png]]
+
+
+## 3. Implementation
+
+- The main components in a TensorFlow system are the client, which uses the Session interface to communicate with the master, and one or more worker processes, with each worker process responsible for arbitrating access to one or more computational devices and for executing graph nodes on those devices as instructed by the master.
+- There are two implementations of tensorflow - local and distributed.
+- The local implementation is used when the client, the master, and the worker all run on a single machine in the context of a single operating system process.
+- The distributed implementation shares most of the code with the local implementation, but extends it with support for an environment where the client, the master, and the workers can all be in different processes on different machines.
+
+
+### Devices
+
+- Devices are the computational heart of TensorFlow. Each worker is responsible for one or more devices, and each device has a device type, and a name.
+- Each device object is responsible for managing allocation and deallocation of device memory, and for arranging for the execution of any kernels that are requested by higher levels in the TensorFlow implementation.
+
+### Tensors
+
+- Tensor is a typed, multi-dimensional array. We support a variety of tensor element types, including signed and unsigned integers ranging in size from 8 bits to 64 bits, IEEE float and double types, a complex number type, and a string type.
+
+#### 3.1 Single-Device Execution
+- Let’s first consider the simplest execution scenario: a single worker process with a single device. The nodes of the graph are executed in an order that respects the dependencies between nodes.In particular, we keep track of a count per node of the number of dependencies of that node that have not yet been executed. Once this count drops to zero, the node is eligible for execution and is added to a ready queue. The ready queue is processed in some unspecified order, delegating execution of the kernel for a node to the device object. When a node has finished executing, the counts of all nodes that depend on the completed node are decremented.
+
+
+#### 3.2 Multi-Device Execution
+
+- Once a system has multiple devices, there are two main complications: deciding which device to place the computation for each node in the graph, and then managing the required communication of data across device boundaries implied by these placement decisions. This subsection discusses these two issues.
+- 
+
+
+#### 3.2.1 Node Placement
+
+- one of the main responsibilities of the TensorFlow implementation is to map the computation onto the set of available devices.
+- One input to the placement algorithm is a cost model, which contains estimates of the sizes of the input and output tensors for each graph node, along with estimates of the computation time required for each node when presented with its input tensors.
+- This cost model is either statically estimated based on heuristics associated with different operation types, or is measured based on an actual set of placement decisions for earlier executions of the graph.
+- The placement algorithm first runs a simulated execution of the graph. The simulation is described below and ends up picking a device for each node in the graph using greedy heuristics. The node to device placement generated by this simulation is also used as the placement for the real execution.
+- For nodes with multiple feasible devices, the placement algorithm uses a greedy heuristic that examines the effects on the completion time of the node of placing the node on each possible device.
+- The device where the node’s operation would finish the soonest is selected as the device for that operation, and the placement process then continues onwards to make placement decisions for other nodes in the graph, including downstream nodes that are now ready for their own simulated execution.
+
+
+### 3.2.2 Cross-Device Communication
+Once the node placement has been computed, the graph is partitioned into a set of subgraphs, one per device. Any cross-device edge from x to y is removed and replaced by an edge from x to a new Send node in x’s subgraph and an edge from a corresponding Receive node to y in y’s subgraph.
+![[Pasted image 20230905185733.png]]
+
+- At runtime, the implementations of the Send and Receive nodes coordinate to transfer data across devices. This allows us to isolate all communication inside Send and Receive implementations, which simplifies the rest of the runtime.
+- When we insert Send and Receive nodes, we canonicalize all users of a particular tensor on a particular device to use a single Receive node, rather than one Receive node per downstream user on a particular device. This ensures that the data for the needed tensor is only transmitted once between a source device → destination device pair, and that memory for the tensor on the destination device is only allocated once, rather than multiple times
+
+
+
+
+### 3.3 Distributed Execution
+
+
+- Distributed execution of a graph is very similar to multidevice execution. After device placement, a subgraph is created per device. Send/Receive node pairs that communicate across worker processes use remote communication mechanisms such as TCP or RDMA to move data across machine boundaries.
+
+
+- ### Fault Tolerance
+- Failures in a distributed execution can be detected in a variety of places. The main ones we rely on are (a) an error in a communication between a Send and Receive node pair, and (b) periodic health-checks from the master process to every worker process.
+- When a failure is detected, the entire graph execution is aborted and restarted from scratch.
+- We support consistent checkpointing and recovery of this state on a restart.
+- In particular, each Variable node is connected to a Save node. These Save nodes are executed periodically, say once every N iterations, or once every N seconds.
+- When they execute, the contents of the variables are written to persistent storage, e.g., a distributed file system.
+- Similarly each Variable is connected to a Restore node that is only enabled in the first iteration after a restart.
+
+
+
+
+### 4. Extensions
+
+#### 4.1 Gradient Computation
+- TensorFlow has built-in support for automatic gradient computation. If a tensor C in a TensorFlow graph depends, perhaps through a complex subgraph of operations, on some set of tensors {Xk}, then there is a built-in function that will return the tensors {dC/dXk}.
+- When TensorFlow needs to compute the gradient of a tensor C with respect to some tensor I on which C depends, it first finds the path in the computation graph from I to C. Then it backtracks from C to I, and for each operation on the backward path it adds a node to the TensorFlow graph, composing the partial gradients along the backwards path using the chain rule.
+- The newly added node computes the “gradient function” for the corresponding operation in the forward path. A gradient function may be registered by any operation. This function takes as input not only the partial gradients computed already along the backward path, but also, optionally, the inputs and outputs of the forward operation
+- This generally means that temporary outputs are consumed soon after being constructed, so their memory can be reused quickly. When the heuristic is ineffective, the user can change the order of graph construction, or add control dependencies as described in Section 5. When gradient nodes are automatically added to the graph, the user has less control, and the heuristics may break down. In particular, because gradients reverse the forward computation order, tensors that are used early in a graph’s execution are frequently needed again near the end of a gradient computation. Such tensors can hold on to a lot of scarce GPU memory and unnecessarily limit the size of computations. We are actively working on improvements to memory management to deal better with such cases. Options include using more sophisticated heuristics to determine the order of graph execution, recomputing tensors instead of retaining them in memory, and swapping out long-lived tensors from GPU memory to more plentiful host CPU memory.
+
+
+### 4.2 Partial Execution
+- Using this user can just execute a subgraph of the entire execution graph. user can inject arbitrary data along any edge in the graph and to retrieve data flowing along any edge in the graph.
+- Each node in the graph has a name and each output of a node can be identified in this way : name:0 represents 1st output and name:1 represents 2nd output. while using this, (name:port) we can run the exact subgraph of the computation graph.
+- The graph is transformed based on the values of inputs and outputs. Each node:port specified in inputs is replaced with a feed node, which will pick up the provided input tensor from specially-initialized entries in a Rendezvous object used for the Run call. Similarly, each output name with a port is connected to a special fetch node that arranges to save the output tensor and return it to the client when the Run call is complete.![[Pasted image 20230906113916.png]]
+- the set of nodes to execute can be determined by starting at each of the nodes named by any output and working backwards in the graph using the graph dependencies to determine the full set of nodes that must be executed in the rewritten graph in order to compute the outputs.
+
+
+### 4.3 Device Constraints
+
+- TensorFlow clients can control the placement of nodes on devices by providing partial constraints for a node about which devices it can execute on.
+- For example, “only place this node on a device of type GPU”, or “this node can be placed on any device in /job:worker/task:17”, or “allocate this node with the node named variable13”.
+- Within the confines of these constraints, the placement algorithm is responsible for choosing an assignment of nodes to devices that provides fast execution of the computation and also satisfies various constraints imposed by the devices themselves, such as limiting the total amount of memory needed on a device in order to execute its subset of graph nodes.
+- Supporting such constraints requires changes to the placement algorithm.
+
+
+### 4.4 Control Flow
+
+- we can simplify the execution of machine learning algorithms by introducing primitive control flow operators. 
+- These operators allow for the skip of entire subgraphs based on a boolean tensor value and the expression of iteration. 
+- The TensorFlow runtime uses tags and frames to identify iterations, allowing multiple iterations to be executed concurrently.
+- TensorFlow uses a distributed coordination mechanism to execute graphs with control flow, addressing the issue of distributed termination detection.
+
+
+### 4.5 Input Operations
+
+- Machine learning models can be trained using special input operation nodes in the graph, configured with filenames. These nodes generate a tensor containing examples from stored data, directly reading it from the storage system into the machine's memory. This method is commonly used in separate client and worker processes, reducing network hops.
+
+### 4.6 Queues
+- They allow different portions of the graph to execute asynchronously, possibly at different candences, and to hand off data through Enqueue and Dequeue operations.
+
+
+### 4.7 Containers
+- A Container is the mechanism within TensorFlow for managing longer-lived mutable state. The backing store for a Variable lives in a container. The default container is one that persists until the process terminates, but we also allow other named containers
 
 
 
 
 
+
+
+
+### Ensemble Learning
+
+- ensemble learning is a procedure where multiple learner modules are applied on a dataset to extract multiple predictions, which are then combined into one composite prediction. This integration of all good individual models into one improved composite model generally leads to higher accuracy levels.
+- The ensemble learning process is commonly broken down into two tasks: First, constructing a set of base learners from the training data; second, combining some or all of these models to form a unified prediction model.
+- Ensemble methods are expected to be useful when there is uncertainty in choosing the best prediction model and when it is critical to avoid large prediction errors.
+- The ensemble learning process can be broken into different stages depending on the application and the approach implemented. We choose to categorize the learning process into three steps following - 
+1. ensemble generation - number of base learner models are generated according to a chosen learning procedure, to be used to predict the final output.
+2. ensemble pruning - a number of base models are filtered out based on various mathematical procedures to improve the overall ensemble accuracy.
+3. ensemble integration - the filtered learner models are combined intelligently to form one unified prediction that is more accurate than the average of all the individuals’ base models.
 
 
 
@@ -243,3 +371,4 @@ file:///C:/Users/pushk/Downloads/1603.04467v2.pdf
 - CNN Mathematical Implementation -> https://cs.nju.edu.cn/wujx/paper/CNN.pdf
 - https://arxiv.org/pdf/1912.05911.pdf RNN to be completed
 - https://hal.science/hal-01352061/file/publishedversion.pdf
+- https://www.zbw.eu/econis-archiv/bitstream/11159/260652/1/EBP074662082_0.pdf
