@@ -8,27 +8,18 @@
         "type": "tabs",
         "children": [
           {
-            "id": "9de131f53ac13622",
-            "type": "leaf",
-            "state": {
-              "type": "empty",
-              "state": {}
-            }
-          },
-          {
-            "id": "1538f361fd4bd1a7",
+            "id": "7a6c1bc7bf25d6a4",
             "type": "leaf",
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Microservices.md",
+                "file": "Kyverno.md",
                 "mode": "source",
                 "source": false
               }
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -95,7 +86,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Microservices.md",
+                "file": "Kyverno.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -112,7 +103,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Microservices.md",
+                "file": "Kyverno.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -135,7 +126,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Microservices.md"
+                "file": "Kyverno.md"
               }
             }
           },
@@ -166,8 +157,19 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "1538f361fd4bd1a7",
+  "active": "7a6c1bc7bf25d6a4",
   "lastOpenFiles": [
+    "Pasted image 20231017145120.png",
+    "Linux Terminal.md",
+    "YAML.md",
+    "Datree.md",
+    "Lens.md",
+    "Kyverno.md",
+    "Kubernetes_INDEPTH.md",
+    "Documentation issues in OPA Policy reference.md",
+    "how-it-works-k3s-revised-9c025ef482404bca2e53a89a0ba7a3c5.svg",
+    "Introduction2Backend.md",
+    "Kubernetes Introduction.md",
     "Pasted image 20231014120551.png",
     "Pasted image 20231014120452.png",
     "Pasted image 20231014120207.png",
@@ -179,10 +181,7 @@
     "Pasted image 20231014114223.png",
     "Microservices.md",
     "Deep Learning.md",
-    "Pasted image 20230927153208.png",
-    "Pasted image 20230927115506.png",
     "Prometheus.md",
-    "Civo Academy.md",
     "Untitled",
     "Postman Task 1.md",
     "Untitled 2.canvas",
@@ -191,16 +190,12 @@
     "Untitled.md",
     "DeepLearning by Codebasics.md",
     "Code Basics ML.md",
-    "Lens.md",
-    "Datree.md",
     "Pandas_Cheat_Sheet.pdf",
     "Machine Learning.md",
     "main_notes.pdf",
-    "Kubernetes Introduction.md",
     "Technical Interview (quick, short, and precise).md",
     "source.md",
     "MLH.md",
-    "Documentation issues in OPA Policy reference.md",
     "Untitled 1.canvas",
     "().md",
     "2023-07-29.md",
