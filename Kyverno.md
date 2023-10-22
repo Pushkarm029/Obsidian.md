@@ -21,3 +21,14 @@
 - The **Cert Renewer** is responsible for watching and renewing the certificates, stored as Kubernetes Secrets, needed by the webhook. 
 - The **Background Controller** handles all generate and mutate-existing policies by reconciling UpdateRequests, an intermediary resource.  
 - the **Report Controllers** handle creation and reconciliation of Policy Reports from their intermediary resources, Admission Reports and Background Scan Reports.
+
+### Policies and Rules
+- A Kyverno policy is a collection of rules. Each rule consists of a [`match`](https://kyverno.io/docs/writing-policies/match-exclude/) declaration, an optional [`exclude`](https://kyverno.io/docs/writing-policies/match-exclude/) declaration, and one of a [`validate`](https://kyverno.io/docs/writing-policies/validate/), [`mutate`](https://kyverno.io/docs/writing-policies/mutate/), [`generate`](https://kyverno.io/docs/writing-policies/generate), or [`verifyImages`](https://kyverno.io/docs/writing-policies/verify-images) declaration. Each rule can contain only a single `validate`, `mutate`, `generate`, or `verifyImages` child declaration.
+- ![[Pasted image 20231018002919.png]]
+- Policies can be defined as cluster-wide resources (using the kind `ClusterPolicy`) or namespaced resources (using the kind `Policy`.) As expected, namespaced policies will only apply to resources within the namespace in which they are defined while cluster-wide policies are applied to matching resources across all namespaces. Otherwise, there is no difference between the two types.
+
+### Writing Policies
+
+- [Policy Settings](https://kyverno.io/docs/writing-policies/policy-settings/)
+- [Validate Rules](https://kyverno.io/docs/writing-policies/validate/) -> Anchors
+- 
