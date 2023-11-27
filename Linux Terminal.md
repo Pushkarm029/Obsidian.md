@@ -15,3 +15,8 @@ cd -> change directory
 
 open /usr/local/bin -> opens the folder
 
+bash -> open another subshell bash
+
+vim file_name -> to edit file
+
+
